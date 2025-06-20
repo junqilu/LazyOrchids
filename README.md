@@ -20,6 +20,9 @@ Requirements:
 * Worker
 
 # Notes 
+Arduino IDE
+* Changes made in Arduino IDE won't be automatically picked up in CLion 
+
 ThingSpeak 
 * For free tier users, you're allowed to upload data once per 15 seconds
 * For the supervisor, you can technically split the data upload for sensor 
