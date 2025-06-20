@@ -1,6 +1,8 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
+#include <Adafruit_SHT31.h>
+
 struct SensorData {
   float temperature;
   float humidity; 

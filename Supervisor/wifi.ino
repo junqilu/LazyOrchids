@@ -1,6 +1,3 @@
-#include <WiFiNINA.h>
-#include <ThingSpeak.h>
-#include "secrets.h"  // Contains your SSID, password, and API keys
 #include "wifi.h"
 
 static WiFiClient client;

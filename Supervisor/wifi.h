@@ -1,6 +1,9 @@
 #ifndef WIFI_H
 #define WIFI_H
 
+#include <WiFiNINA.h>
+#include <ThingSpeak.h>
+#include "secrets.h"  // Contains your SSID, password, and API keys
 #include "sensor.h"
 #include "ldr.h"
 
