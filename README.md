@@ -19,3 +19,14 @@ Requirements:
     * Scriptable 
 * Worker
 
+# Notes 
+ThingSpeak 
+* For free tier users, you're allowed to upload data once per 15 seconds
+* For the supervisor, you can technically split the data upload for sensor 
+  and LDR, and set it like upload the sensor data every 15 seconds and LDR 
+  data every 30 seconds. However, ThingSpeak will regard that per 15 second,
+  you have 2 batches of data to upload and that exceeds the one upload per 
+  15 seconds, resulting in the latter data upload always failed. This can 
+  be seen in the branch `supervisor_individual_timer`. Because of that, 
+  I'll always upload the data all at once
+
