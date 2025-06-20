@@ -1,5 +1,7 @@
-#ifndef LDR_CONTROL_H
-#define LDR_CONTROL_H
+#ifndef LDR_H
+#define LDR_H
+
+#include <Arduino.h>
 
 struct LightData {
   int light_reading;

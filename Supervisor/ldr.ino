@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "ldr.h"
 
 bool read_ldr(int light_pin, LightData &data) {
@@ -10,7 +9,7 @@ bool read_ldr(int light_pin, LightData &data) {
     Serial.print("Light reading: ");
     Serial.println(raw_light);
 
-    return true; // Always returns true; could add error checking later
+    return true;
   }else{
     Serial.println("Light reading failed (NaN values)");
     return false;

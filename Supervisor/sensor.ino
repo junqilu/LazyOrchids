@@ -1,4 +1,3 @@
-#include <Adafruit_SHT31.h>
 #include "sensor.h"
 
 static Adafruit_SHT31 sht = Adafruit_SHT31();

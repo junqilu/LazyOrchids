@@ -7,11 +7,10 @@
 
 
 
-int light_pin = A0;  // Which ever pin you defined for the LDR to detect light 
+const int light_pin = A0;  // Which ever pin you defined for the LDR to detect light
 
 NonBlockingTimer upload_timer(15000);  // 15-second interval. ThingSpeak allows you to send data once per 15 sec as a free tier user as the fastest speed
 bool first_upload_flag = true; //Use a first_upload_flag so the first time upload can be run right away. Otherwise, you need to wait for 15 sec before the 1st upload
-
 
 
 
