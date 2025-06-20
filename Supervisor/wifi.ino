@@ -1,6 +1,3 @@
-#include <WiFiNINA.h>
-#include <ThingSpeak.h>
-#include "secrets.h"  // Contains your SSID, password, and API keys
 #include "wifi.h"
 
 static WiFiClient client;
@@ -20,23 +17,4 @@ bool setup_wifi(){
   ThingSpeak.begin(client);
 
   return true;
-}
-
-bool thingspeak_upload_data(const SensorData &sensor_data, const LightData &light_data){
-  
-  ThingSpeak.setField(1, sensor_data.temperature);
-  ThingSpeak.setField(2, sensor_data.humidity);
-  ThingSpeak.setField(3, light_data.light_reading);
-
-  int result = ThingSpeak.writeFields(SECRET_CH_ID, SECRET_WRITE_APIKEY);
-
-  if (result == 200) {
-    Serial.println("Data sent to ThingSpeak.");
-    return true;
-  } else {
-    Serial.print("Error sending data: ");
-    Serial.println(result);
-
-    return false;
-  }
 }
