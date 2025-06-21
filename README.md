@@ -13,6 +13,16 @@ Arduino Uno R3 is used as the worker to read terrarium environment factors
 and make actions directly (activates either fan or mister)
 
 # Setup 
+## General terrarium
+### Requirements 
+* 1 × big plastic bottle
+* Some water gel beads 
+* Some Sphagnum moss 
+* 1 × small glass as water tank for mister
+* 3D designed holders 
+  * Fan motor holder
+  * Mister disc holder
+
 ## Supervisor
 ### Requirements
 * Hardware 
