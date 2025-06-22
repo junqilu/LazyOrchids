@@ -4,13 +4,25 @@
 #include "sensor.h"
 #include "fan.h"
 
-const int fan_pin = 5; // Connect to D5 
-const int mister_pin = 3; // Connect to D3 
+const int fan_pin = 3; // Connect to D3. This will be controled by Timer2, which will be set to a lower frequency 
+const int mister_pin = 5; // Connect to D5
 const int light_pin = A0;  // LDR
+const unsigned long light_check_interval_seconds = 1800; // 30 min in seconds is 1800 here
 
-unsigned long last_fan_run = 0;
-unsigned long fan_duration = 0;
-bool fan_forced_on = false; // It tracks whether the fan is running due to the periodic fan routine, not the humidity balancing logic
+// Set up the treatment plan for day and night etc
+const int day_humidity_min = 85;
+const int day_humidity_max = 90;
+const unsigned long day_fan_interval_min = 20; // In days, run the fan 2 min per 20 min
+const unsigned long day_fan_duration_min = 2; 
+
+const int day_night_light_threshold = 500; 
+
+const int night_humidity_min = 90;
+const int night_humidity_max = 95;
+const unsigned long night_fan_interval_min = 30; // At nights, run the fan 2 min per 30 min
+const unsigned long night_fan_duration_min = 2; 
+
+const int night_sleep_light_threshold = 20;
 
 
 void setup() {
