@@ -1,13 +1,30 @@
+#include "fan.h"
+
+
 void setup_fan(int fan_pin){
   pinMode(fan_pin, OUTPUT);
+
+  // Set Timer2 to fast PWM with no prescaler → ~31.25 kHz (inaudible). This will largely reduce the noises. Please ensure that you're using D3 for the fan and your sketch doesn't use tone()--Timer2 controls D3 and D11 and tone()
+  TCCR2B = TCCR2B & 0b11111000 | 0x01;
 }
 
 void activate_fan(int fan_pin) {
-  analogWrite(fan_pin, 100); // Drop to target speed
   // Some more powerful motor (like reduction motors) need higher speed; otherwise the fan doesn't rotate unless you rotate it first  
+  if (!fan_current_on) { // If the fan is currently already running, then no need for the kick start 
+    analogWrite(fan_pin, 200); // Give a quick kick start. Even with the 2-pin motor, a speed = 100 can still sometimes not start the fan properly 
+    delay(100);
+
+    fan_current_on = true; 
+  }  
+  
+  analogWrite(fan_pin, 100); // This is the speed that the fan will run
 }
 
 void deactivate_fan(int fan_pin) {
+  if (fan_current_on){
+    fan_current_on = false;
+  }
+  
   analogWrite(fan_pin, 0);
 }
 
