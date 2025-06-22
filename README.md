@@ -61,6 +61,9 @@ and make actions directly (activates either fan or mister)
   <img src="readme_img/worker.png" width="500"/>
 </div>
 
+Notice:
+* Fan motor is connected to D3. This is very important so you can reduce the frequency for the Timer2 (See `Worker/fan.ino's setup_fan()`) to reduce the motor noise when running the fan 
+  * Another very useful tip is to ensure that the motor is securely mounted to the holder to avoid vibration. This can also largely reduce the noise
 
 
 # Notes 
