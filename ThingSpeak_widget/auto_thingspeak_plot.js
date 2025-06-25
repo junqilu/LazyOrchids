@@ -57,7 +57,6 @@ function auto_refresh_widget(input_widget, minute_int) { //Automatically schedul
 }
 
 
-
 // Worker functions
 function credentials_checking() { // Check if Scriptable's Keychain has my_thingspeak_channel_id and my_thingspeak_read_api_key
     let credentials = ["my_thingspeak_channel_id", "my_thingspeak_read_api_key"];
@@ -150,7 +149,9 @@ function translate_field_name(common_name) {
 function data_extractor(historical_data_list, field_name) {
     let dates = historical_data_list.map(p => new Date(p["created_at"]));
     let values = historical_data_list.map(p => p[field_name]);
-    let current_value = Number(values[values.length - 1]);
+
+    let raw_current_value = Number(values[values.length - 1]);
+    let current_value = parseFloat(raw_current_value.toFixed(1));
 
     return {dates, values, current_value};
 }
@@ -166,24 +167,38 @@ function day_or_night(historical_data_list, day_night_light_threshold) { // Use 
     }
 }
 
-function determine_ideal_humidity_ranges(historical_data_list, day_night_light_threshold) {
+function determine_ideal_ranges(historical_data_list, day_night_light_threshold, field_name) {
     let time_flag = day_or_night(historical_data_list, day_night_light_threshold);
-    let humidity_ideal_min;
-    let humidity_ideal_max;
+    let ideal_min;
+    let ideal_max;
 
-    if (time_flag === "day") { // Determine the min and max for humidity. These values should agree with Worker Arduino
-        humidity_ideal_min = 85;
-        humidity_ideal_max = 90;
-    } else if (time_flag === "night") {
-        humidity_ideal_min = 90;
-        humidity_ideal_max = 95;
+    if (field_name === 'humidity') {
+        if (time_flag === "day") { // Determine the min and max for humidity. These values should agree with Worker Arduino
+            ideal_min = 85;
+            ideal_max = 90;
+        } else if (time_flag === "night") {
+            ideal_min = 90;
+            ideal_max = 95;
+        } else {
+            console.log("Something went wrong with day_or_night()");
+            return;
+        }
+    } else if (field_name === 'temperature') {
+        if (time_flag === "day") { // Determine the min and max for humidity. These values should agree with Worker Arduino
+            ideal_min = 24;
+            ideal_max = 28;
+        } else if (time_flag === "night") {
+            ideal_min = 18;
+            ideal_max = 22;
+        } else {
+            console.log("Something went wrong with day_or_night()");
+            return;
+        }
     } else {
-        console.log("Something went wrong with day_or_night()");
-
+        console.log("Unknown field_name");
         return;
     }
-
-    return {humidity_ideal_min, humidity_ideal_max};
+    return {ideal_min, ideal_max};
 }
 
 function highlight_dates(dates, segments_num, start_index = 0) {
@@ -245,8 +260,8 @@ function display_data_general_settings(input_widget, data_field_name) {
     let paddingBottom = 20;
     let paddingRight = 60;
 
-    // Set up drawing context
-    let plotWidth = 990;
+    // Set up drawing context. Each plot will have the same size regardless of the min and max for that plot
+    let plotWidth = 1000;
     let plotHeight = 400;
     let width = plotWidth + paddingRight;
     let height = plotHeight + paddingTop + paddingBottom;
@@ -419,17 +434,18 @@ function display_data(historical_data_list, day_night_light_threshold) {
     display_time(widget);
 
     // Display humidity data
-    let {
-        humidity_ideal_min,
-        humidity_ideal_max
-    } = determine_ideal_humidity_ranges(historical_data_list, day_night_light_threshold); // Day and night have different ideal humidity ranges
-
-    display_data_worker(widget, historical_data_list, "humidity", 80, 100, humidity_ideal_min, humidity_ideal_max);
+    let humidity_ideals = determine_ideal_ranges(historical_data_list, day_night_light_threshold, "humidity"); // Day and night have different ideal humidity ranges
+    display_data_worker(widget, historical_data_list, "humidity", 80, 100, humidity_ideals.ideal_min, humidity_ideals.ideal_max);
 
     widget.addSpacer(10);
 
     // Display temperature data
-    display_data_worker(widget, historical_data_list, "temperature", 21, 28, 23.9, 25);
+    let temperature_ideals = determine_ideal_ranges(historical_data_list, day_night_light_threshold, "temperature"); // Day and night have different ideal humidity ranges
+    let temperature_ideal_min = temperature_ideals.ideal_min;
+    let temperature_ideal_max = temperature_ideals.ideal_max;
+    let temperature_plot_min = parseFloat((temperature_ideal_min * 0.9).toFixed(1));
+    let temperature_plot_max = parseFloat((temperature_ideal_max * 1.1).toFixed(1));
+    display_data_worker(widget, historical_data_list, "temperature", temperature_plot_min, temperature_plot_max, temperature_ideal_min, temperature_ideal_max);
 
     auto_refresh_widget(widget, 5); //Try to refresh the widget every 5 min
 
