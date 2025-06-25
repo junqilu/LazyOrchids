@@ -1,5 +1,11 @@
 # LazyOrchids
-This project uses Arduino to control the terrarium environment for growing orchids
+This project uses Arduino to finely control the terrarium environment for growing orchids in an informative way.
+
+# Miniature orchids: challenging to grow, captivating to collect
+Miniature orchids are notoriously delicate — they demand precision, consistency, and an almost obsessive level of care. That’s why I created a smart, self-regulating system that removes the stress of cultivation while preserving the beauty of the process. A network of Arduinos manages humidity, temperature, and airflow in real time, maintaining a finely tuned environment that adapts to the needs of each species — varying by time of day and biological preference. Paired with a sleek Scriptable dashboard, growers can monitor their setup remotely with confidence and ease. This isn’t just automation — it’s peace of mind, elegantly delivered, letting collectors trade micromanagement for the quiet joy of watching these captivating miniatures thrive.
+
+## Bulbophyllum lemniscatum
+Bulbophyllum lemniscatum is the perfect stress test for any orchid-growing setup. As a miniature epiphyte with extremely narrow tolerance for humidity, temperature, and air circulation, it leaves little room for error — making it an ideal model plant to validate a precision-controlled environment. Its small size demands frequent but gentle moisture, and its sensitivity to nighttime humidity shifts pushes the responsiveness of any automated system to the limit. By choosing B. lemniscatum as my benchmark species, I ensured that the Arduino-based setup and Scriptable monitoring interface are not just functional, but capable of meeting the high standards required by one of the most finicky orchids in cultivation. If this system can keep B. lemniscatum thriving, it can handle just about anything.
 
 # Workflow
 ## Supervisor 
@@ -64,6 +70,13 @@ and make actions directly (activates either fan or mister)
 Notice:
 * Fan motor is connected to D3. This is very important so you can reduce the frequency for the Timer2 (See `Worker/fan.ino's setup_fan()`) to reduce the motor noise when running the fan 
   * Another very useful tip is to ensure that the motor is securely mounted to the holder to avoid vibration. This can also largely reduce the noise
+
+## Scriptable widget
+Using code `ThingSpeak_widget/auto_thingspeak_plot.js` in Scriptable allows you to obtain and plot the data from ThingSpeak (uploaded by the Supervisor Arduino) dynamically and display the data on your iphone
+* The plotting limits and ideal ranges will change automatically using the latest LDR readings to determine whether it's day or night
+<div style="text-align: center;">
+  <img src="readme_img/scriptable_widget.png" width="400"/>
+</div>
 
 
 # Notes 
